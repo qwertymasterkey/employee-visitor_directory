@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <div class="container">
+        <table class="table" style="width:400px">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+    <!-- jinja tags for python code -->
+                {% for emp in employees %}
+                    <tr>
+                        <td>{{emp.name}}</td>
+                        <td>{{emp.email}}</td>
+                        <td>{{emp.dept}}</td>
+                        <td>{{emp.location}}</td>
+                        <td><a href="{% url 'delete_emp' emp.id %}" class="btn btn-outline-danger btn-sm">
+                            Delete
+                        </a></td>
+                        <td><a href="{% url 'update_emp' emp.id %}"  class="btn btn-outline-secondary btn-sm">Update</a></td>
+                    </tr>
+                    <!-- variable tags for accessing variable -->
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+{% if update %}
+<h3>Update Employee details here:</h3>
+<form action="{% url 'updated_emp' update.id %}" method="POST">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" value="{{ update.name }}" required><br>
+    <label for="email">email:</label><br>
+    <input type="text" id="email" name="email" value="{{ update.email }}" required><br>
+    <br>
+    <label for="department">department:</label><br>
+    <input type="text" id="department" name="department" value="{{ update.dept }}" required><br>
+    <br>
+    <label for="location">location:</label><br>
+    <input type="text" id="location" name="location" value="{{ update.location }}" required><br>
+    <br>
+    <input type="submit" value="Update">
+</form>
+{% else %}
+<h3>Add Employee details here:</h3>
+<form action="{% url 'employee' %}" method="POST">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br required>
+    <label for="email">email:</label><br>
+    <input type="text" id="email" name="email" required><br>
+    <br>
+    <label for="department">department:</label><br>
+    <input type="text" id="department" name="department" required><br>
+    <br>
+    <label for="location">location:</label><br>
+    <input type="text" id="location" name="location" required><br>
+    <br>
+    <input type="submit" value="add">
+</form>
+{% endif %}
+{% endblock %}

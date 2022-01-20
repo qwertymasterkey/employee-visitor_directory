@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <div class="container">
+        <table class="table" style="width:400px">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Location</th>
+                    <th>Attending Employee</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+    <!-- jinja tags for python code -->
+                {% for emp in employees %}
+                    <tr>
+                        <td>{{emp.name}}</td>
+                        <td>{{emp.email}}</td>
+                        <td>{{emp.phone}}</td>
+                        <td>{{emp.location}}</td>
+                        <td>{{emp.employee_name}}</td>
+                        <td>{{emp.status}}</td>
+                        <td><a href="{% url 'delete_vis' emp.id %}" class="btn btn-outline-danger btn-sm">
+                            Delete
+                        </a></td>
+                        <td><a href="{% url 'update_vis' emp.id %}"  class="btn btn-outline-secondary btn-sm">Update</a></td>
+                    </tr>
+                    <!-- variable tags for accessing variable -->
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+{% if update %}
+<h3>Update  Visitor Details here:</h3>
+<form action="{% url 'updated_vis' update.id %}" method="POST">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" value="{{ update.name }}" required><br><br>
+    <label for="email">E-mail:</label><br>
+    <input type="text" id="email" name="email" value="{{ update.email }}" required><br>
+    <br>
+    <label for="department">Phone:</label><br>
+    <input type="number" id="department" name="department" value="{{ update.phone }}" required><br>
+    <br>
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" value="{{ update.location }}" required><br>
+    <br>
+    <label for="attend_emp">Attending Employee:</label><br>
+    <input type="text" id="attend_emp" name="attend_emp" value="{{update.employee_name}}" required><br>
+    <br>
+    {% if status1 == "Waiting" %}
+    <label for="status">Status:</label><br>
+  <select id="status" name="status">
+    <option value="Waiting">Waiting</option>
+    <option value="Checked In">Checked In</option>
+    <option value="Checked Out">Checked Out</option>
+  </select>
+    {% elif  status1 == "Checked In" %}
+  <label for="status">Status:</label><br>
+  <select id="status" name="status">
+    <option value="Checked In">Checked In</option>
+    <option value="Waiting">Waiting</option>
+    <option value="Checked Out">Checked Out</option>
+    </select>
+    {% else %}
+    <label for="status">Status:</label><br>
+  <select id="status" name="status">
+    <option value="Checked Out">Checked Out</option>
+    <option value="Waiting">Waiting</option>
+    <option value="Checked In">Checked In</option>
+  </select>
+    {% endif %}
+    <br><br>
+    <input type="submit" value="Update">
+    </form>
+{% else %}
+<h3>Add Visitor details here:</h3>
+<form action="{% url 'visitor' %}" method="POST">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="email">E-mail:</label><br>
+    <input type="text" id="email" name="email"><br>
+    <br>
+    <label for="department">Phone:</label><br>
+    <input type="number" id="department" name="department" required><br>
+    <br>
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" required><br>
+    <br>
+    <label for="attend_emp">Attending Employee:</label><br>
+    <input type="text" id="attend_emp" name="attend_emp" required><br>
+    <br>
+    <label for="status">Status:</label><br>
+  <select id="status" name="status">
+    <option value="Waiting">Waiting</option>
+    <option value="Checked In">Checked In</option>
+    <option value="Checked Out">Checked Out</option>
+  </select>
+    <br><br>
+    <input type="submit" value="add">
+</form>
+{% endif %}
+{% endblock %}
